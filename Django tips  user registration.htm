@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<!-- saved from url=(0071)http://www.b-list.org/weblog/2006/sep/02/django-tips-user-registration/ -->
+<html><meta style="visibility: hidden !important; display: block !important; width: 0px !important; height: 0px !important; border-style: none !important;"><embed id="__IDM__" type="application/x-idm-downloader" width="1" height="1" style="visibility: hidden !important; display: block !important; width: 1px !important; height: 1px !important; border-style: none !important; position: absolute !important; top: 0px !important; left: 0px !important;"></meta><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
+
+  <title>Django tips: user registration</title>
+
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1">
+  
+  <meta name="microid" content="d0714f36c065c0c9bd5c0797f690714f050715bc">
+  
+  <link rel="stylesheet" href="./Django tips  user registration_files/b-list-20110815.css" type="text/css">
+  
+
+  
+  <link rel="alternate" title="Feed of latest entries" href="http://www.b-list.org/feeds/entries/" type="application/atom+xml">
+        
+
+
+  <link rel="up" href="http://www.b-list.org/weblog/2006/sep/02/" title="Entries published on September 2, 2006" type="text/html">
+
+
+  <link rel="prev" href="http://www.b-list.org/weblog/2006/sep/01/friday-fun/" title="Friday fun" type="text/html">
+
+
+
+
+  <link rel="next" href="http://www.b-list.org/weblog/2006/sep/03/tool-wars/" title="Tool Wars" type="text/html">
+
+
+
+<script type="text/javascript" src="./Django tips  user registration_files/saved_resource"></script></head>
+<body>
+  <div id="header">
+    <p>
+      <a href="http://www.b-list.org/">The B-List</a> is the personal weblog of <a href="http://www.b-list.org/about/">James Bennett</a>, a web developer in Lawrence, Kansas.
+    </p>
+  </div>
+
+  <div id="content">
+  
+
+
+<h1>Django tips: user&nbsp;registration</h1>
+
+<p class="meta">Published <a href="http://www.b-list.org/weblog/2006/sep/02/">September 2, 2006</a>. Filed under:
+  
+<a href="http://www.b-list.org/weblog/categories/django/">Django</a>.
+  
+
+</p><p>One of the most common and, generally, most successful models for letting people sign up for user accounts requires the user to go through some form of “activation”; usually it looks something like&nbsp;this:
+</p>
+<ol>
+<li>
+     User fills out a form with a username, password and email&nbsp;address.
+ </li>
+<li>
+     User gets an email with a “confirmation link” which must be clicked to activate the&nbsp;account.
+ </li>
+<li>
+     User clicks the link and the account becomes active; then they log in&nbsp;normally.
+ </li>
+</ol>
+<p>So let’s look at how to do this with&nbsp;Django.
+</p>
+<p>Also, before we dive in, let me note that this one’s still a work in progress. The question of how to do this has come up a lot, and it’s something I’ve been working on for a personal project, so this is basically what I’m using right now — I haven’t tested it thoroughly, though, so if you spot a problem please leave a&nbsp;comment.
+</p>
+<p><ins datetime="2007-03-13T10:29:00-0400">Update: if you’re interested in the mechanics of how registration works, keep reading. If you’re looking for code, I’ve cleaned this up considerably and released it under an open-source license; check out the <a href="http://code.google.com/p/django-registration/">django-registration project on Google Code</a> if you want to play around with it.</ins></p>
+<h2>Set up a user&nbsp;profile</h2>
+<p>In order to do this effectively, we’ll need to generate some sort of unique key which can be used to activate the account, and we’ll need somewhere to store it. The obvious place is in a model which is somehow tied to the <code>User</code> model, probably some sort of “user profile” and, as luck would have it, you’ll probably want to be setting something like that up anyway — a customizable user profile is a nice feature to have&nbsp;regardless.
+</p>
+<p>So here’s a very simple “user profile” model; you’d probably want to add more fields to it, but this has the bare minimum we need to do user&nbsp;registration:
+</p>
+<div class="typygmentdown"><pre><span class="k">from</span> <span class="nn">django.db</span> <span class="k">import</span> <span class="n">models</span>
+<span class="k">from</span> <span class="nn">django.contrib.auth.models</span> <span class="k">import</span> <span class="n">User</span>
+ 
+<span class="k">class</span> <span class="nc">UserProfile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+    <span class="n">activation_key</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">maxlength</span><span class="o">=</span><span class="mf">40</span><span class="p">)</span>
+    <span class="n">key_expires</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Once that model is installed, we can open up our settings file and specify it as the value of the setting <code>AUTH_PROFILE_MODULE</code>, so that Django will <a href="http://www.b-list.org/weblog/2006/06/06/django-tips-extending-user-model">set up some conveniences for us</a>.
+</p>
+<h2><span class="caps">OK</span>, now how do we register an&nbsp;account?</h2>
+<p>Ordinarily when creating an instance of a model, it’d be easiest just to use the <code>create_object</code> generic view, but in this particular case that won’t be sufficient for a couple of&nbsp;reasons:
+</p>
+<ol>
+<li>
+     It would create an active account, which we don’t want — the <code>User</code> model lets us mark users active or inactive with a <code>BooleanField</code> called <code>is_active</code>, but that field defaults to <code>True</code>.
+ </li>
+<li>
+     It would require the user to input a salted hashed password, which is horribly&nbsp;unfriendly.
+ </li>
+<li>
+     It wouldn’t give us any way to check the user’s password for typos (say, by having them enter it&nbsp;twice).
+ </li>
+<li>
+     It wouldn’t offer us any way to email the user a confirmation&nbsp;link.
+ </li>
+</ol>
+<p>So we’ll want to write our own view. The password-related problems described above could be worked around by using <code>UserCreationForm</code>, a custom manipulator provided by the auth application which provides two password fields and checks that they match, then does the salting and hashing automatically before saving (this is how the admin lets you easily create a new user, incidentally — it uses a special-case view that relies on <code>UserCreationForm</code>). But <code>UserCreationForm</code> doesn’t include a field for the email address, so we’d have no way of asking for it or sending a confirmation&nbsp;email.
+</p>
+<p>So let’s write our own manipulator while we’re at it. We’ll need that to be defined before we can call on it from a view, so we’ll write it first. Here’s the&nbsp;code:
+</p>
+<div class="typygmentdown"><pre><span class="k">from</span> <span class="nn">django</span> <span class="k">import</span> <span class="n">forms</span>
+<span class="k">from</span> <span class="nn">django.core</span> <span class="k">import</span> <span class="n">validators</span>
+<span class="k">from</span> <span class="nn">django.contrib.auth.models</span> <span class="k">import</span> <span class="n">User</span>
+ 
+<span class="k">class</span> <span class="nc">RegistrationForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Manipulator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">forms</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">field_name</span><span class="o">=</span><span class="s">'username'</span><span class="p">,</span>
+                            <span class="n">length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">maxlength</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span>
+                            <span class="n">is_required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">validator_list</span><span class="o">=</span><span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">isAlphaNumeric</span><span class="p">,</span>
+                                                              <span class="bp">self</span><span class="o">.</span><span class="n">isValidUsername</span><span class="p">]),</span>
+            <span class="n">forms</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">field_name</span><span class="o">=</span><span class="s">'email'</span><span class="p">,</span>
+                             <span class="n">length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span>
+                             <span class="n">maxlength</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span>
+                             <span class="n">is_required</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+            <span class="n">forms</span><span class="o">.</span><span class="n">PasswordField</span><span class="p">(</span><span class="n">field_name</span><span class="o">=</span><span class="s">'password1'</span><span class="p">,</span>
+                                <span class="n">length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span>
+                                <span class="n">maxlength</span><span class="o">=</span><span class="mf">60</span><span class="p">,</span>
+                                <span class="n">is_required</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+            <span class="n">forms</span><span class="o">.</span><span class="n">PasswordField</span><span class="p">(</span><span class="n">field_name</span><span class="o">=</span><span class="s">'password2'</span><span class="p">,</span>
+                                <span class="n">length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">maxlength</span><span class="o">=</span><span class="mf">60</span><span class="p">,</span>
+                                <span class="n">is_required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                <span class="n">validator_list</span><span class="o">=</span><span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">AlwaysMatchesOtherField</span><span class="p">(</span><span class="s">'password1'</span><span class="p">,</span>
+                                                                                   <span class="s">'Passwords must match.'</span><span class="p">)]),</span>
+            <span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">isValidUsername</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_data</span><span class="p">,</span> <span class="n">all_data</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">field_data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">User</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">raise</span> <span class="n">validators</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s">'The username "</span><span class="si">%s</span><span class="s">" is already taken.'</span> <span class="o">%</span> <span class="n">field_data</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_data</span><span class="p">):</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">new_data</span><span class="p">[</span><span class="s">'username'</span><span class="p">],</span>
+                                     <span class="n">new_data</span><span class="p">[</span><span class="s">'email'</span><span class="p">],</span>
+                                     <span class="n">new_data</span><span class="p">[</span><span class="s">'password1'</span><span class="p">])</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">u</span>
+</pre></div>
+
+
+<p>This may look somewhat complex, but it’s not. Most of it will make sense if you’ve read through the <a href="http://www.djangoproject.com/documentation/forms/">documentation on manipulators</a>, and it’s really just a slightly modified version of <code>UserCreationForm</code> designed to suit the needs of web-based&nbsp;registration.
+</p>
+<p>Here’s how it breaks&nbsp;down:
+</p>
+<ol>
+<li>
+     The <code>__init__</code> method sets up the fields we care about: one for username, one for email and two copies of the password. We use the <code>AlwaysMatchesOtherField</code> validator on the second password field to tell Django to make sure the password is entered the same each&nbsp;time.
+ </li>
+<li>
+     The <code>isValidUsername</code> method is a custom validator, designed to give us immediate notice if the username is already&nbsp;taken.
+ </li>
+<li>
+     The <code>save</code> method calls <code>User.objects.create_user</code>; the <code>User</code> model has a custom manager which defines this method to easily handle creating the hashed password, and all we have to do is give it a username, email address and plain-text password — it will hand us back a valid <code>User</code> object. Then we set <code>is_active</code> to <code>False</code> and save the new&nbsp;user.
+ </li>
+</ol>
+<h2><span class="caps">OK</span>, <em>now</em> we can sign&nbsp;up</h2>
+<p>Now that we’ve got a manipulator that will do what we want, we can write a simple registration view that lets new users sign up. First we import a few things we’ll&nbsp;need:
+</p>
+<div class="typygmentdown"><pre><span class="k">import</span> <span class="nn">datetime</span><span class="o">,</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">sha</span>
+<span class="k">from</span> <span class="nn">django.shortcuts</span> <span class="k">import</span> <span class="n">render_to_response</span><span class="p">,</span> <span class="n">get_object_or_404</span>
+<span class="k">from</span> <span class="nn">django.core.mail</span> <span class="k">import</span> <span class="n">send_mail</span>
+</pre></div>
+
+
+<p>We’ll also need the <code>UserProfile</code> model and the <code>RegistrationForm</code> manipulator we just created, but since they’ll live inside our application the exact import statements will depend on the name and layout of the app. When you’re defining custom manipulators, it’s often a good idea to put them in a file named <code>forms.py</code> inside your application; assuming we’ve done that here, the imports would look like&nbsp;this:
+</p>
+<div class="typygmentdown"><pre><span class="k">from</span> <span class="nn">myproject.myapp.models</span> <span class="k">import</span> <span class="n">UserProfile</span>
+<span class="k">from</span> <span class="nn">myproject.myapp.forms</span> <span class="k">import</span> <span class="n">RegistrationForm</span>
+</pre></div>
+
+
+<p>Now let’s look at the view for&nbsp;registration:
+</p>
+<div class="typygmentdown"><pre><span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+        <span class="c"># They already have an account; don't let them register again</span>
+        <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">'register.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'has_account'</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+    <span class="n">manipulator</span> <span class="o">=</span> <span class="n">RegistrationForm</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">:</span>
+        <span class="n">new_data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="n">manipulator</span><span class="o">.</span><span class="n">get_validation_errors</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="c"># Save the user                                                                                                                                                 </span>
+            <span class="n">manipulator</span><span class="o">.</span><span class="n">do_html2python</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
+            <span class="n">new_user</span> <span class="o">=</span> <span class="n">manipulator</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
+            
+            <span class="c"># Build the activation key for their account                                                                                                                    </span>
+            <span class="n">salt</span> <span class="o">=</span> <span class="n">sha</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="mf">5</span><span class="p">]</span>
+            <span class="n">activation_key</span> <span class="o">=</span> <span class="n">sha</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">salt</span><span class="o">+</span><span class="n">new_user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+            <span class="n">key_expires</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mf">2</span><span class="p">)</span>
+            
+            <span class="c"># Create and save their profile                                                                                                                                 </span>
+            <span class="n">new_profile</span> <span class="o">=</span> <span class="n">UserProfile</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">new_user</span><span class="p">,</span>
+                                      <span class="n">activation_key</span><span class="o">=</span><span class="n">activation_key</span><span class="p">,</span>
+                                      <span class="n">key_expires</span><span class="o">=</span><span class="n">key_expires</span><span class="p">)</span>
+            <span class="n">new_profile</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            
+            <span class="c"># Send an email with the confirmation link                                                                                                                      </span>
+            <span class="n">email_subject</span> <span class="o">=</span> <span class="s">'Your new example.com account confirmation'</span>
+            <span class="n">email_body</span> <span class="o">=</span> <span class="s">"Hello, </span><span class="si">%s</span><span class="s">, and thanks for signing up for an \                                                                                                     </span>
+<span class="n">example</span><span class="o">.</span><span class="n">com</span> <span class="n">account</span><span class="err">!</span>\<span class="n">n</span>\<span class="n">nTo</span> <span class="n">activate</span> <span class="n">your</span> <span class="n">account</span><span class="p">,</span> <span class="n">click</span> <span class="n">this</span> <span class="n">link</span> <span class="n">within</span> <span class="mf">48</span> \                                                                                               
+<span class="n">hours</span><span class="p">:</span>\<span class="n">n</span>\<span class="n">nhttp</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">accounts</span><span class="o">/</span><span class="n">confirm</span><span class="o">/%</span><span class="n">s</span><span class="s">" % (</span>
+                <span class="n">new_user</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+                <span class="n">new_profile</span><span class="o">.</span><span class="n">activation_key</span><span class="p">)</span>
+            <span class="n">send_mail</span><span class="p">(</span><span class="n">email_subject</span><span class="p">,</span>
+                      <span class="n">email_body</span><span class="p">,</span>
+                      <span class="s">'accounts@example.com'</span><span class="p">,</span>
+                      <span class="p">[</span><span class="n">new_user</span><span class="o">.</span><span class="n">email</span><span class="p">])</span>
+            
+            <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">'register.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'created'</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="n">new_data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">FormWrapper</span><span class="p">(</span><span class="n">manipulator</span><span class="p">,</span> <span class="n">new_data</span><span class="p">,</span> <span class="n">errors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">'register.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
+</pre></div>
+
+
+<p>Here’s what’s going on in that&nbsp;view:
+</p>
+<ol>
+<li>
+     First we use <code>is_authenticated</code> to see if the user is logged in already — if they are, they have an account and shouldn’t sign up for a new one, so we immediately stop and return a response. The template <code>register.html</code> should have some way of checking for the <code>already_has_account</code> context variable and show an appropriate&nbsp;message.
+ </li>
+<li>
+     Otherwise we instantiate a <code>RegistrationForm</code> to use during the sign-up&nbsp;processing.
+ </li>
+<li>
+     If the request was a <code>POST</code>, we feed it to the manipulator and check for validation&nbsp;errors.
+ </li>
+<li>
+     If there were no validation errors, then we can go through with saving the new account and sending a confirmation&nbsp;email.
+ </li>
+<li>
+     If there were errors, or if the request wasn’t a <code>POST</code>, we hand off to the template with a form to&nbsp;display.
+ </li>
+</ol>
+<p>Now, most of the interesting stuff happens in step 4, where we save the new account, so let’s walk through that step by&nbsp;step:
+</p>
+<ol>
+<li>
+     We convert the submitted information to Python values, and save the new user account. That hands us back a brand-new, but inactive,&nbsp;user.
+ </li>
+<li>
+     Then we create a suitably random activation key; this is why we imported the <code>random</code> and <code>sha</code> modules — we get a random number and create a <acronym title="Secure Hash Algorithm"><span class="caps">SHA</span></acronym> hash from it, grabbing the first few characters to use as a “salt”; then we mash the new account’s username onto the end of the “salt” and generate a <span class="caps">SHA</span> hash of that, which will be the final activation&nbsp;key.
+ </li>
+<li>
+     We use <code>timedelta</code> to get a date value two days into the future — we’ll use this to expire the activation key after 48&nbsp;hours.
+ </li>
+<li>
+     We create and save a new <code>UserProfile</code>, tied to the <code>User</code> we just created, and give it the activation key and expiration date we’ve just&nbsp;generated.
+ </li>
+<li>
+     We build up a subject and body for an email message, then send it off to the person who just signed up by using Django’s built-in <code>send_mail</code> function (note that to be truly portable, the email message should probably actually get information about the site’s name and domain from <code>django.contrib.sites</code>, and that <code>send_mail</code> takes a <em>list</em> of email addresses to send&nbsp;to).
+ </li>
+</ol>
+<p>That’s a whole lot of stuff, without a whole lot of code&nbsp;:)
+</p>
+<h2>Confirmation&nbsp;time</h2>
+<p>Now the only thing left to write is a view which can activate the new&nbsp;account:
+</p>
+<div class="typygmentdown"><pre><span class="k">def</span> <span class="nf">confirm</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">activation_key</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">'confirm.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'has_account'</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+    <span class="n">user_profile</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">,</span>
+                                     <span class="n">activation_key</span><span class="o">=</span><span class="n">activation_key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">user_profile</span><span class="o">.</span><span class="n">key_expires</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">'confirm.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'expired'</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+    <span class="n">user_account</span> <span class="o">=</span> <span class="n">user_profile</span><span class="o">.</span><span class="n">user</span>
+    <span class="n">user_account</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">user_account</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">'confirm.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'success'</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+</pre></div>
+
+
+<p>This view assumes that you’ve <a href="http://www.djangoproject.com/documentation/url_dispatch/">set up your URLs</a> to grab the part which contains the activation key and pass it as an&nbsp;argument.
+</p>
+<p>Here’s how it works from&nbsp;there:
+</p>
+<ol>
+<li>
+     Once again, we check to make sure the user’s not already logged in — if they are, there’s no point trying to activate a new account for&nbsp;them.
+ </li>
+<li>
+     We use the shortcut <code>get_object_or_404</code> to see if there’s a <code>UserProfile</code> matching this activation key — if not, it’ll automatically send a “page not found”&nbsp;response.
+ </li>
+<li>
+     We check whether the activation key has expired; if so, we jump straight to the response and let the template know it should display an appropriate&nbsp;message.
+ </li>
+<li>
+     If the key isn’t expired, we grab the <code>User</code> object associated with this <code>UserProfile</code>, and flip its <code>is_active</code> field to <code>True</code>.
+ </li>
+<li>
+     Finally, we return a response, telling the template that the activation was successful. It’d probably be a good idea for the template to show a link to a login page at this point (or, alternatively, you could import and use the convenience function <code>django.contrib.auth.login</code> to automatically log the user&nbsp;in).
+ </li>
+</ol>
+<h2>And we’re&nbsp;done</h2>
+<p>Now we’ve got a fully functional user-registration system, with confirmation emails. We did have to write some code, but there’s not a whole lot of it and it’s all fairly&nbsp;straightforward.
+</p>
+<p>If, like more than a couple people who’ve asked questions about user registration on the Django mailing lists and in <acronym title="Internet Relay Chat"><span class="caps">IRC</span></acronym>, you’ve been looking for a way to do this in Django, feel free to take this code and adapt it to your needs — I can’t guarantee that it’ll work for what you want, but if nothing else it should give you a good&nbsp;start.
+</p>
+
+
+
+  </div>
+  <div id="footer">
+    <p><a href="http://www.b-list.org/about/copyright/">Copyright ©</a> 2006-2013 <a href="http://www.b-list.org/about/">James Bennett</a>. All rights reserved. Opinions expressed here are solely those of the author(s).</p>
+  </div>
+  <script src="./Django tips  user registration_files/saved_resource(1)"></script>
+
+
+</body></html>
