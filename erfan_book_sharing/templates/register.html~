@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>{%block title %}Homepage{% endblock %}</title>
+
+  
+</head>{% block page_header %} 
+<body style="color: rgb(0, 0, 0); background-color: rgb(130, 159, 130);" alink="#ee0000" link="#0000ee" vlink="#551a8b">
+
+<div style="background-color: rgb(40, 160, 0); height: 85px;" align="center"><big><big><big><big><span style="background-color: rgb(255, 204, 0);"></span></big></big></big></big>
+<table style="text-align: left; width: 284px; height: 88px;" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center; background-color: rgb(255, 204, 0);"><big><big><big>Book
+Sharing IUST</big>&nbsp; Project<br>
+      </big></big></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+</div>
+{% endblock %} <!-- it contain the header  and the bg color -->
+{% block page_form %}{{manipulator}} {% endblock %}
+<table style="text-align: left; width: 183px; height: 74px;" border="1" cellpadding="2" cellspacing="2">
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(102, 51, 255);"><big>Description<br>
+      <big><big>{% block page_desc %}Home Page {% endblock %}</big></big></big></td>
+<!-- Home page is Description --> </tr>
+  </tbody>
+</table>
+
+<span style="font-family: DejaVu Sans;"><span style="font-family: Bitstream Charter;"></span></span><br>
+
+<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+
+<p style="margin-top: 0px; height: 35px;">
+<br>
+</p>
+
+<table style="text-align: left; height: 322px; width: 622px; margin-left: auto; margin-right: auto;" border="0" cellpadding="2" cellspacing="2">
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 590px; background-color: white;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <big><big><big><big><big><span style="font-style: italic;">Welcome!</span></big></big></big></big></big><br>
+      <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+To Our Free Book Sharing Center ,The Target of Building this Website is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Make a Place For Uploading or Downloading Books For <span style="font-style: italic;">Free .<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span>If You think That You Have PDF That can Be Usefull For
+Others&nbsp; so Do<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Not Waste Time Share It Just Now .&nbsp;&nbsp; :D<br>
+&nbsp;&nbsp; <br>
+      <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <big><span style="font-style: italic;"><big><big>With The Best
+Wishes <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Designers.<br>
+      </big></big></span></big><span style="font-weight: bold;"><span style="font-weight: bold;"></span></span><span style="font-style: italic;"><span style="font-weight: bold;"><span style="font-weight: bold;"><span style="font-style: italic;"></span></span></span><span style="font-style: italic;"><span style="font-weight: bold;"></span></span><br>
+      </span></td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
+<table style="text-align: left; width: 157px; height: 172px; background-color: rgb(255, 204, 102);" border="1" cellpadding="2" cellspacing="2">
+
+  <tbody>
+    <tr>
+      <th style="vertical-align: top;">The Designers:<br>
+      </th>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Meraj Nouredini<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Erfan Sharafzadeh<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Amir Masoud Ghiasy<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Masoud Haghbin<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Koosha Esmaielzadeh<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</body></html>
