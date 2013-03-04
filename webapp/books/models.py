@@ -7,4 +7,6 @@ class Books(models.Model):
 	uploader = models.CharField(max_length = 30)
 	email = models.EmailField(blank = True, verbose_name = 'e-mail')
 	upload_date = models.DateField()
-	
+	rate = models.CharField(max_length = 1)
+	comment = models.CharField(max_lenght = 200)
+
