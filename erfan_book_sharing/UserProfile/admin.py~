@@ -1,0 +1,4 @@
+from UserProfile.models import RegistrationForm
+from django.contrib import admin
+admin.site.register(RegistrationForm)
+
