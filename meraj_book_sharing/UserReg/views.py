@@ -33,6 +33,7 @@ def signup(request):
     if password == cpassword and email == cemail:
         if user is None:
             newuser = User.objects.create_user(username, email, password)
+            newuser.save()
             return HttpResponse("your account has been created successfully!")
         else:
             return HttpResponse("Same account already exist")
