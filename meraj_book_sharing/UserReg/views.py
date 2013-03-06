@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 
@@ -10,17 +10,23 @@ def loginform(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            return HttpResponse("login Done")
+            return render_to_response('User.html',{ 'name' : user.username })
+           # return HttpResponse("login Done")
             # Redirect to a success page.
             #render_to_response('login.html',{'t':'if'})
         else:
-            return HttpResponse("Your curently loged in")
+            return HttpResponse("Your curently logged in")
             #render_to_response('login.html',{'t':'first else'})
             # Return a 'disabled account' error message
     else:
         #render_to_response('login.html',{'t':'second else'})
         # Return an 'invalid login' error message.# Create your views here.
         return HttpResponse("login Failed")
+
+def logout_view(request):
+    logout(request)
+    return HttpResponse("You've successfully logged out")
+    
 def signup(request):
     name = request.POST['name']
     username = request.POST['username']

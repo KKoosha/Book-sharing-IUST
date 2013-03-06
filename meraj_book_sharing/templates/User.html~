@@ -1,0 +1,10 @@
+<html>
+    <head>
+        <title> IUST Book sharing </title>
+    </head>
+
+    <body>
+        <h6> {{ name }} profile </h6><br>
+        <a href="/logout"> Logout </a>
+    </body>
+</html>
