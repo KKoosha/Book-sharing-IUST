@@ -3,12 +3,30 @@
 		<title> IUST Book Sharing Portal </title>
 	</head>
 	<body>
-		<h1>Login</h1><br>
-		<form action="login/" method="POST" >
-			username <input type="text" name="username" ><br>
-			password <input type="password" name="password" ><br>
-			<input type="submit" value="Login" >
-		</form>
-	</div>
+	<table border="0" cellpadding="100">
+		<tr>
+			<td>
+				<h1>Login</h1><br>
+				<form action="login/" method="POST" >
+				Username <input type="text" name="username" ><br>
+				Password <input type="password" name="password" ><br>
+				<input type="submit" value="Login" >
+				</form>
+			</td>
+			<td>
+				<h1>Signup</h1>
+				<form action="signup/" method="POST" >
+				Name: <input type="text" name="name" ><br>
+				Username: <input type="text" name="username" ><br>
+				Password: <input type="password" name="password" ><br>
+				Confirm pass: <input type="password" name="cpassword" ><br>
+				Email: <input type="email" name="email" ><br>
+				Confirm Email: <input type="email" name="cemail" ><br>
+				<input type="checkbox" name="agree" value="accept"> I Agree the terms<br>
+				<input type="submit" value="Signup" >
+				</form>
+			</td>
+		</tr>
+		</table>
 	</body>
 </html>

@@ -19,5 +19,7 @@ urlpatterns = patterns('',
     #url(r'^polls/(?P<poll_id>\d+)/vote/$', 'polls.views.vote'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/', 'UserReg.views.loginform'),
+    url(r'^signup/', 'UserReg.views.signup'),
+    
     #url(r'^login/' , 'mysite.templates.login.html'),
 )
