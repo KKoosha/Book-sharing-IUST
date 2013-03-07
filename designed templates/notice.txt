@@ -1,0 +1,1 @@
+please replace your files with my html files and put the indexstyle.css file near both of them.
