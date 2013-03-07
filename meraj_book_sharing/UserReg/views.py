@@ -21,7 +21,7 @@ def loginform(request):
     else:
         #render_to_response('login.html',{'t':'second else'})
         # Return an 'invalid login' error message.# Create your views here.
-        return HttpResponse("login Failed")
+        return HttpResponse("login Failed\nCheck your Username & Password, They're case-sensitive")
 
 def logout_view(request):
     logout(request)
