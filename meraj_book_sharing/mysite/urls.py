@@ -21,6 +21,6 @@ urlpatterns = patterns('',
     url(r'^login/', 'UserReg.views.loginform'),
     url(r'^logout/', 'UserReg.views.logout_view'),
     url(r'^signup/', 'UserReg.views.signup'),
-    
+    url(r'^download/','books.views.download_page')
     #url(r'^login/' , 'mysite.templates.login.html'),
 )
