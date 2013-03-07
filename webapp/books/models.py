@@ -9,4 +9,5 @@ class Books(models.Model):
 	upload_date = models.DateField()
 	rate = models.CharField(max_length = 1)
 	comment = models.CharField(max_lenght = 200)
+	url_pdf = models.CharField(max_lenght = 100)
 
