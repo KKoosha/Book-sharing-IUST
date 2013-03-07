@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>IUST Book Sharing Portal</title>
+<link href="/indexstyle.css" rel="stylesheet" type="text/css" /><!--[if lte IE 7]>
+<style>
+.content { margin-right: -1px; } /* this 1px negative margin can be placed on any of the columns in this layout with the same corrective effect. */
+ul.nav a { zoom: 1; }  /* the zoom property gives IE the hasLayout trigger it needs to correct extra whiltespace between the links */
+</style>
+<![endif]-->
+</head>
+
+<body>
+
+<div class="container">
+  <div class="header"><a href="#"><img src="" alt="Insert Logo Here" name="Insert_logo" width="20%" height="90" id="Insert_logo" style="background: #8090AB; display:block;" /></a> 
+    <!-- end .header --></div>
+  <div class="sidebar1">
+    <ul class="nav">
+      <li><a href="#">prject on Github</a></li>
+      <li><a href="#">Django</a></li>
+      <li><a href="#">IUST Computer Courses</a></li>
+      <li><a href="#">???</a></li>
+    </ul>
+    <p align="center"> Already a member?</p>
+	<table align="center"><tr><td class="formtable"><center>Login here:</center><br /></td></tr>
+				<tr><td class="formtable"><center><br />
+				<p>Username:
+				  <input type="text" name="username" >
+				  <br><br />
+				Password:
+				<input type="password" name="password" >
+		  </p>
+				<p><br>
+				  <input type="submit" value="Login" class="buttun">
+		  </p></td></tr></table></p>
+    <!-- end .sidebar1 --></div>
+  <div class="content">
+    <h1>Welcome!</h1>
+    <p>This is a simple and free book sharing site powerd by Python-django.</p>
+    <p>If it is your first time visiting us,don't waste your time and start by signing up.Every book you have may be useful for others,so share it!</p>
+    <p>We wish you a nice expirience with this site.</p>
+    <p>Enjoy!</p>
+    <table width="68%" align="left"><tr><td class='formtable' width="100%" >
+    <h2 ><center>Sign Up form</center></h2></td></tr><tr><td class='formtable'>
+    <form action="signup/" method="POST" ><p>
+				Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="name" type="text" size="40" ><br><br />
+				Username: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="username" type="text" size="40" >
+		<br><br />
+			Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input name="password" type="password" size="40" ><br><br />
+				Confirm pass: &nbsp;&nbsp;<input type="password" name="cpassword" size="40" ><br><br />
+				Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="email" name="email" size="40" ><br><br />
+				Confirm Email: &nbsp;<input type="email" name="cemail" size="40"><br><br />
+				<input type="checkbox" name="agree" value="accept"> I Agree the terms<br><br /></p><p>
+				  <input type="submit" value="Signup" class="buttun" />
+				</p>
+    </form></td></tr></table>
+    
+    <!-- end .content --></div>
+  <div class="footer">
+    <p ><center>Created by &quot;Book Sharing IUST group&quot;&copy; 2013</center></p>
+    <p>&nbsp;</p>
+    <!-- end .footer --></div>
+  <!-- end .container --></div>
+</body>
+</html>
