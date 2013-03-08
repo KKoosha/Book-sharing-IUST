@@ -12,7 +12,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/home/amirmasoud/Desktop/booksharing/Book-sharing-IUST/meraj_book_sharing/mysqlite.db',                      # Or path to database file if using sqlite3.
+        #'NAME': '/home/amirmasoud/Desktop/booksharing/Book-sharing-IUST/meraj_book_sharing/mysqlite.db',                      # Or path to database file if using sqlite3.
+        #'NAME': '/home/koosha/Desktop/Book-sharing-IUST/meraj_book_sharing/mysqlite.db',
+        #'NAME': '/home/erfan/Book-sharing-IUST/Book-sharing-IUST/meraj_book_sharing/mysqlite.db',
+        'NAME': '/home/meraj/Documents/projects/Book-sharing-IUST/meraj_book_sharing/mysqlite.db',
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -113,7 +116,10 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "/home/amirmasoud/Desktop/booksharing/Book-sharing-IUST/meraj_book_sharing/templates"
+    #"/home/amirmasoud/Desktop/booksharing/Book-sharing-IUST/meraj_book_sharing/templates"
+    #"/home/koosha/Desktop/Book-sharing-IUST/meraj_book_sharing/templates"   
+    #"/home/erfan/Book-sharing-IUST/Book-sharing-IUST/meraj_book_sharing/templates"
+    "/home/meraj/Documents/projects/Book-sharing-IUST/meraj_book_sharing/templates"
 )
 
 INSTALLED_APPS = (
@@ -123,7 +129,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'polls',
 	'UserReg',
 	'books',
     # Uncomment the next line to enable the admin:
