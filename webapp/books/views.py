@@ -56,7 +56,7 @@ def download_page(request):
     b_list.append(books_list[0])
     b_list.append(books_list[1])
     b_list.append"""
-    Books.objects.all().delete()
+    #Books.objects.all().delete()
     allbooks=PDF.objects.all()
     return render_to_response('download.html',{'books_list':books_list,'uploadedpdf':allbooks})
     
