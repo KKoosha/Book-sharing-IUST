@@ -36,7 +36,7 @@
 				<tbody><tr><td bgcolor="RED"><font size="+2">
 					Book Name:{{pdf.name}}
 					</font>
-					<br>Author:{{pdf.author}}
+					<br>Author:{{pdf.author.author}}
 					<br>Book Describtion:{{pdf.comment}}
 					<br>Download:
 					<a href="{{pdf.docfile.url}}">{{pdf.name}}

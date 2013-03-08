@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
-
+from django.conf import settings
+from django.conf.urls.static import static
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -25,5 +26,6 @@ urlpatterns = patterns('',
     url(r'^contact/','books.views.contact'),
     url(r'^search-form/$', 'books.views.search_form'),
     url(r'^search/$', 'books.views.search'),
+    url(r'^upload/$', 'upload_app.views.list')
     #url(r'^login/' , 'mysite.templates.login.html'),
-)
+)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

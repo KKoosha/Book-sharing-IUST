@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<title>Upload</title>
+   </head>
+
+	<body>
+		<form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+              <table>
+                   {{ form.as_table }}
+        		  </table>
+              <p><input type="submit" value="Upload" /></p>
+        </form>		
+		
+   </body>
+
+
+
+
+
+</html>

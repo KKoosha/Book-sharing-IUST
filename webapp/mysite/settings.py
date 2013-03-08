@@ -15,7 +15,7 @@ DATABASES = {
         #'NAME': '/home/amirmasoud/Desktop/booksharing/Book-sharing-IUST/webapp/mysqlite.db',                      # Or path to database file if using sqlite3.
         #'NAME': '/home/koosha/Desktop/Book-sharing-IUST/webapp/mysqlite.db',
         #'NAME': '/home/erfan/Book-sharing-IUST/Book-sharing-IUST/webapp/mysqlite.db',
-        'NAME': '/home/meraj/Documents/projects/Book-sharing-IUST/webapp/mysqlite.db',
+        'NAME': '/home/koosha/Desktop/Book-sharing-IUST/webapp/mysqlite.db',
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -52,12 +52,12 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = '/home/koosha/Desktop/Book-sharing-IUST/webapp/UploadFolders/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/upload/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -119,7 +119,7 @@ TEMPLATE_DIRS = (
     #"/home/amirmasoud/Desktop/booksharing/Book-sharing-IUST/webapp/templates"
     #"/home/koosha/Desktop/Book-sharing-IUST/webapp/templates"   
     #"/home/erfan/Book-sharing-IUST/Book-sharing-IUST/webapp/templates"
-    "/home/meraj/Documents/projects/Book-sharing-IUST/webapp/templates"
+    "/home/koosha/Desktop/Book-sharing-IUST/webapp/templates"
 )
 
 INSTALLED_APPS = (
@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 	'UserReg',
 	'books',
+     'upload_app',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

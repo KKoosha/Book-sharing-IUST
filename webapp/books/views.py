@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from mysite.forms import ContactForm
 from books import models
 from books.models import Books
+from upload_app.models import PDF
 
 def contact(request):
     if request.method == 'POST':
@@ -55,8 +56,9 @@ def download_page(request):
     b_list.append(books_list[0])
     b_list.append(books_list[1])
     b_list.append"""
-    
-    return render_to_response('download.html',{'books_list':books_list})
+    Books.objects.all().delete()
+    allbooks=PDF.objects.all()
+    return render_to_response('download.html',{'books_list':books_list,'uploadedpdf':allbooks})
     
     
     
