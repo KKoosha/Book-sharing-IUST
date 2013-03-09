@@ -17,7 +17,7 @@ def list(request):
             newbook.save()
             allbooks=PDF.objects.all()
             books_list=Books.objects.all()
-            return render_to_response('download.html',{'uploadedpdf':allbooks,'books_list':books_list})
+            return render_to_response('upload.html',{'uploadedpdf':allbooks,'books_list':books_list})
     else:
         form=UploadForm()
         return render_to_response('upload.html',{'form':form})

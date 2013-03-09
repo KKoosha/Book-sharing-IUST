@@ -13,9 +13,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         #'NAME': '/home/amirmasoud/Desktop/booksharing/Book-sharing-IUST/webapp/mysqlite.db',                      # Or path to database file if using sqlite3.
-        #'NAME': '/home/koosha/Desktop/Book-sharing-IUST/webapp/mysqlite.db',
+        'NAME': '/home/koosha/Desktop/Book-sharing-IUST/webapp/mysqlite.db',
         #'NAME': '/home/erfan/Book-sharing-IUST/Book-sharing-IUST/webapp/mysqlite.db',
-        'NAME': '/home/meraj/Documents/projects/Book-sharing-IUST/webapp/mysqlite.db',
+        #'NAME': '/home/meraj/Documents/projects/Book-sharing-IUST/webapp/mysqlite.db',
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -52,10 +52,10 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT =  #'/home/koosha/Desktop/Book-sharing-IUST/webapp/UploadFolders/'
+MEDIA_ROOT =  '/home/koosha/Desktop/Book-sharing-IUST/webapp/UploadFolders/'
               #'/home/amirmasoud/Desktop/booksharing/Book-sharing-IUST/webapp/UploadFolders',                      # Or path to database file if using sqlite3.
               #'/home/erfan/Book-sharing-IUST/Book-sharing-IUST/webapp/UploadFolders',
-              '/home/meraj/Documents/projects/Book-sharing-IUST/webapp/UploadFolders'
+              #'/home/meraj/Documents/projects/Book-sharing-IUST/webapp/UploadFolders'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -120,9 +120,9 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     #"/home/amirmasoud/Desktop/booksharing/Book-sharing-IUST/webapp/templates"
-    #"/home/koosha/Desktop/Book-sharing-IUST/webapp/templates"   
+    "/home/koosha/Desktop/Book-sharing-IUST/webapp/templates"   
     #"/home/erfan/Book-sharing-IUST/Book-sharing-IUST/webapp/templates"
-    "/home/meraj/Documents/projects/Book-sharing-IUST/webapp/templates"
+    #"/home/meraj/Documents/projects/Book-sharing-IUST/webapp/templates"
 )
 
 INSTALLED_APPS = (
