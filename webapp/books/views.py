@@ -25,16 +25,26 @@ def contact(request):
     return render_to_response('contact_form.html', {'form': form})
 
 def search_form(request):
-    return render_to_response('search_form.html')
+    try:
+        user=request.session['user']
+        if user.is_authenticated() :
+            return render_to_response('search_form.html')
+    except:
+        return HttpResponse("you're not logged in")
 
 def search(request):
-    if 'q' in request.GET and request.GET['q']:
-        q = request.GET['q']
-        books = Books.objects.filter(name__icontains=q)
-        return render_to_response('search_results.html',
-            {'books': books, 'query': q})
-    else:
-        return render_to_response('search_form.html', {'error': True})
+    try:
+        user=request.session['user']
+        if user.is_authenticated() :
+            if 'q' in request.GET and request.GET['q']:
+                q = request.GET['q']
+                books = Books.objects.filter(name__icontains=q)
+                return render_to_response('search_results.html',
+                    {'books': books, 'query': q})
+            else:
+                return render_to_response('search_form.html', {'error': True})
+    except:
+        return HttpResponse("you're not logged in")
 """
 b1=Books(name='Linux Commands Line And Shell Scripting',author
 ='Richard Blum',uploader='Koosha',upload_date='1391-12-17'
@@ -49,16 +59,15 @@ url_pdf='home/koosha/Desktop/PDF/AVR.pdf',email='-@gmail.com')
 b2.save()
 """    
 def download_page(request):
-   # first_books()
-    #Books.objects.all().delete()
-    books_list=Books.objects.all()
-    """b_list=[]
-    b_list.append(books_list[0])
-    b_list.append(books_list[1])
-    b_list.append"""
-    #Books.objects.all().delete()
-    allbooks=PDF.objects.all()
-    return render_to_response('download.html',{'books_list':books_list,'uploadedpdf':allbooks})
-    
+    try:
+        user=request.session['user']
+        if user.is_authenticated() :
+            books_list=Books.objects.all()
+            allbooks=PDF.objects.all()
+            return render_to_response('download.html',{'books_list':books_list,'uploadedpdf':allbooks})
+        else :
+            return HttpResponse("you're not logged in")
+    except:
+        return HttpResponse("you're not logged in")
     
     
