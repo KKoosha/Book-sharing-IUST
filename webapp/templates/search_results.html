@@ -190,7 +190,7 @@ ul.nav a { zoom: 1; }  /* the zoom property gives IE the hasLayout trigger it ne
     <p>Found {{ books|length }} book{{ books|pluralize }}.</p>
     <ul>
         {% for book in books %}
-        <li><a href='book.url_pdf'>{{ book.name }}</a></li>
+        <li><a href='{{book.docfile.url}}'>{{ book.name }}</a></li>
         {% endfor %}
     </ul>
 {% else %}
