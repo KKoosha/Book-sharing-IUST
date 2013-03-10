@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>wrong password</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>IUST Book Sharing Portal</title>
 <style>
 @charset "utf-8";
 body {
@@ -46,7 +46,7 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
 	width: 80%;
 	max-width: 1260px;/* a max-width may be desirable to keep this layout from getting too wide on a large monitor. This keeps line length more readable. IE6 does not respect this declaration. */
 	min-width: 780px;/* a min-width may be desirable to keep this layout from getting too narrow. This keeps line length more readable in the side columns. IE6 does not respect this declaration. */
-	background: #FFF;
+	background: #D1CEF8;
 	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout. It is not needed if you set the .container's width to 100%. */
 }
 
@@ -142,14 +142,32 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* this changes the background
 	text-align: center;
 }</style>
 
-
 </head>
 
 <body>
 
-<div class="container">
+<div class="container">{% load static from staticfiles %}
+
+  <div class="header"><a href="#"><img src="{% static "iustbsh.jpg" %}
+" width="100%" height="200" alt="IUST BOOK SHARING PROJECT" style="border-color: blue; border: 40; " border="5" /></a> 
+    <!-- end .header --></div>
+  <div class="sidebar1">
+    <ul class="nav">
+      <li><a href="https://github.com/KKoosha/Book-sharing-IUST">project on Github</a></li>
+      <li><a href="http://www.djangoproject.com/">Django</a></li>
+      <li><a href="http://courses.iust.ac.ir/">IUST Computer Courses</a></li>
+      <li><a href="us.html">About us</a></li>
+    </ul>
+    <br />
+    <!-- end .sidebar1 --></div>
   <div class="content">
-    {% extends "base.html" %}
+    <h1>Welcome!</h1>
+    <p>This is a simple and free book sharing site powerd by Python-django.</p>
+    <p>If it is your first time visiting us,don't waste your time and start by signing up.Every book you have may be useful for others,so share it!</p>
+    <p>We wish you a nice experience with this site.</p>
+    <p>Enjoy!</p>
+	
+	{% extends "base.html" %}
 {% load url from future %}
 
 {% block content %}
@@ -176,8 +194,12 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* this changes the background
 </form>
 
 {% endblock %}
-
+    
     <!-- end .content --></div>
+  <div class="footer">
+    <p ><center>Created by &quot;Book Sharing IUST group&quot;&copy; 2013</center></p>
+    <p>&nbsp;</p>
+    <!-- end .footer --></div>
   <!-- end .container --></div>
 </body>
 </html>

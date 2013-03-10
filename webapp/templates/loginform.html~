@@ -159,7 +159,7 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* this changes the background
       <li><a href="us.html">About us</a></li>
     </ul>
     <p align="center"> Already a member?</p>
-	<form action="login/" method="POST" >
+	<form action="loginform/" method="POST" >
 	<table align="center"><tr><td class="formtable"><center>Login here:</center><br /></td></tr>
 				<tr><td class="formtable"><center><br />
 				<p>Username:

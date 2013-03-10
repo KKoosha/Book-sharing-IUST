@@ -1,3 +1,9 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Search Results</title>
+<style>
 @charset "utf-8";
 body {
 	font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif;
@@ -40,7 +46,7 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
 	width: 80%;
 	max-width: 1260px;/* a max-width may be desirable to keep this layout from getting too wide on a large monitor. This keeps line length more readable. IE6 does not respect this declaration. */
 	min-width: 780px;/* a min-width may be desirable to keep this layout from getting too narrow. This keeps line length more readable in the side columns. IE6 does not respect this declaration. */
-	background: #FFF;
+	background: #D1CEF8;
 	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout. It is not needed if you set the .container's width to 100%. */
 }
 
@@ -67,9 +73,18 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
 	padding-bottom: 10px;
 	text-align: center;
 }
+.sidebar2 
+{
+    float: left;
+	width: 30%;
+	background: #93A5C4;
+	padding-bottom: 10px;
+	text-align: center;
+    
+}
 .content {
 	padding: 10px 0;
-	width: 70%;
+	width: 40%;
 		float: right;
 }
 
@@ -134,4 +149,57 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* this changes the background
 	height:30pt;
 }.container .footer p center {
 	text-align: center;
-}
+}</style>
+<!--[if lte IE 7]>
+<style>
+.content { margin-right: -1px; } /* this 1px negative margin can be placed on any of the columns in this layout with the same corrective effect. */
+ul.nav a { zoom: 1; }  /* the zoom property gives IE the hasLayout trigger it needs to correct extra whiltespace between the links */
+</style>
+<![endif]--></head>
+
+<body>
+{% load static from staticfiles %}
+<div class="container">
+  <div class="header"><a href="#"><img src="{% static "iustbsh.jpg" %}
+" width="100%" height="200" alt="IUST BOOK SHARING PROJECT" style="border-color: blue; border: 40; " border="5" /></a> 
+    <!-- end .header --></div>
+  <div class="sidebar1">
+  <h3><center> Site Menu</center></h3>
+    <ul class="nav">
+      <li><a href="https://github.com/KKoosha/Book-sharing-IUST">prject on Github</a></li>
+      <li><a href="http://www.djangoproject.com/">Django</a></li>
+      <li><a href="http://courses.iust.ac.ir/">IUST Computer Courses</a></li>
+      <li><a href="/contact/">Contact us</a></li>
+    </ul>
+    <p>&nbsp;</p>
+    <!-- end .sidebar1 --></div>
+    <div class="sidebar2">
+    <h3><center> User Menu</center></h3>
+    <ul class="nav">
+      <li><a href="/search-form/">Search Books</a></li>
+      <li><a href="/download/">Full index</a></li>
+      <li><a href="/download/">Upload Books</a></li>
+      <li><a href="/logout">Logout</a></li>
+    </ul>
+    
+    </div>
+  <div class="content">
+    <h4> {{ name }} , profile </h4><br>
+    <p>You searched for: <strong>{{ query }}</strong></p>
+    {% if books %}
+    <p>Found {{ books|length }} book{{ books|pluralize }}.</p>
+    <ul>
+        {% for book in books %}
+        <li><a href='book.url_pdf'>{{ book.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No books matched your search criteria.</p>
+{% endif %}
+    <!-- end .content --></div>
+  <div class="footer">
+    <p><center>Created by &quot;Book Sharing IUST group&quot;&copy; 2013</center></p>
+    <!-- end .footer --></div>
+  <!-- end .container --></div>
+</body>
+</html>
