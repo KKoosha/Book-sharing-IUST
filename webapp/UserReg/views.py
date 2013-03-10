@@ -10,7 +10,10 @@ def loginform(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            return render_to_response('User.html',{ 'name' : user.username })
+            #<new>
+            request.session['user'] = user
+            #</new>
+            return render_to_response('User.html',{ 'name' : request.session['user'].username })
            # return HttpResponse("login Done")
             # Redirect to a success page.
             #render_to_response('login.html',{'t':'if'})
@@ -25,6 +28,12 @@ def loginform(request):
 
 def logout_view(request):
     logout(request)
+    #<new>
+    try:
+        del request.session['user']
+    except KeyError:
+        pass
+    #</new>
     return HttpResponse("You've successfully logged out")
     
 def signup(request):
