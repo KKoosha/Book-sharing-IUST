@@ -169,10 +169,11 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* this changes the background
 				<input type="password" name="password" >
 		  </p>
 				<p><br>
-				  <input type="submit" value="Login" class="buttun">
+				  <input type="submit" value="Login" class="buttun"/>
 		  </p></td></tr></table></p></form>
     <!-- end .sidebar1 --></div>
   <div class="content">
+	<p><font color="red">{{ logout }}</font></p>
     <h1>Welcome!</h1>
     <p>This is a simple and free book sharing site powerd by Python-django.</p>
     <p>If it is your first time visiting us,don't waste your time and start by signing up.Every book you have may be useful for others,so share it!</p>
@@ -181,15 +182,15 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* this changes the background
     <table width="68%" align="left"><tr><td class='formtable' width="100%" >
     <h2 ><center>Sign Up form</center></h2></td></tr><tr><td class='formtable'>
     <form action="signup/" method="POST" ><p>
-				Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="name" type="text" size="40" ><br><br />
-				Username: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="username" type="text" size="40" >
+				Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="name" type="text" size="40" required><br><br />
+				Username: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="username" type="text" size="40" required>
 		<br><br />
-			Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input name="password" type="password" size="40" ><br><br />
-				Confirm pass: &nbsp;&nbsp;<input type="password" name="cpassword" size="40" ><br><br />
-				Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="email" name="email" size="40" ><br><br />
-				Confirm Email: &nbsp;<input type="email" name="cemail" size="40"><br><br />
-				<input type="checkbox" name="agree" value="accept"> I Agree the terms<br><br /></p><p>
-				  <input type="submit" value="Signup" class="buttun" />
+			Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input name="password" type="password" size="40" required><br><br />
+				Confirm pass: &nbsp;&nbsp;<input type="password" name="cpassword" size="40" required><br><br />
+				Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="email" name="email" size="40" required><br><br />
+				Confirm Email: &nbsp;<input type="email" name="cemail" size="40" required><br><br />
+				<input type="checkbox" name="agree" value="accept" required> I Agree the terms<br><br /></p><p>
+				<input type="submit" value="Signup" class="buttun" />
 				</p>
     </form></td></tr></table>
     

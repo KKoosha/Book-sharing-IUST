@@ -10,31 +10,22 @@ def loginform(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            #<new>
             request.session['user'] = user
-            #</new>
             return render_to_response('User.html',{ 'name' : request.session['user'].username })
-           # return HttpResponse("login Done")
-            # Redirect to a success page.
-            #render_to_response('login.html',{'t':'if'})
+           
         else:
             return HttpResponse("Your curently logged in")
-            #render_to_response('login.html',{'t':'first else'})
-            # Return a 'disabled account' error message
+        
     else:
-        #render_to_response('login.html',{'t':'second else'})
-        # Return an 'invalid login' error message.# Create your views here.
         return HttpResponse("login Failed\nCheck your Username & Password, They're case-sensitive")
 
 def logout_view(request):
     logout(request)
-    #<new>
     try:
         del request.session['user']
     except KeyError:
         pass
-    #</new>
-    return HttpResponse("You've successfully logged out")
+    return render_to_response('loginform.html', {'logout':"You've successfully logged out"})
     
 def signup(request):
     name = request.POST['name']
@@ -49,12 +40,8 @@ def signup(request):
         if user is None:
             newuser = User.objects.create_user(username, email, password)
             newuser.save()
-            return HttpResponse("your account has been created successfully!")
+            return render_to_response('loginform.html', {'logout':"Your account has been created successfully!"})
         else:
-            return HttpResponse("Same account already exist")
+            return render_to_response('loginform.html', {'logout':"Same account already exist"})
     else:
-        return HttpResponse("password or email confirmation doesn't match")
-            
-        
-    
-    return HttpResponse("Done")
+        return render_to_response('loginform.html', {'logout':"password or email confirmation doesn't match"})

@@ -1,4 +1,4 @@
-# Create your views here.
+
 from books.models import Books
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -31,8 +31,7 @@ def search_form(request):
         if user.is_authenticated() :
             return render_to_response('search_form.html',{'name' : user.username})
     except:
-        return HttpResponse("you're not logged in")
-
+        return render_to_response('loginform.html', {'logout':"You must login first!"})
 def search(request):
     try:
         user=request.session['user']
@@ -45,20 +44,9 @@ def search(request):
             else:
                 return render_to_response('search_form.html', {'error': True})
     except:
-        return HttpResponse("you're not logged in")
-"""
-b1=Books(name='Linux Commands Line And Shell Scripting',author
-='Richard Blum',uploader='Koosha',upload_date='1391-12-17'
-,rate='0',comment='Usefull Book For People Who Wants to Learn linux',
-url_pdf='home/koosha/Desktop/PDF/linuxcommand.pdf',email='-@gmail.com')
-b1.save()
-    
-b2=Books(name='Programming and Customizing AVR',author='Dhananjay V.Gadre',uploader='Koosha',upload_date='1391-12-17'
-,rate='0',comment='Fast Way to Learn AVR Programming ',
-url_pdf='home/koosha/Desktop/PDF/AVR.pdf',email='-@gmail.com')
-    
-b2.save()
-"""    
+        return render_to_response('loginform.html', {'logout':"You must login first!"})
+
+
 def download_page(request):
     try:
         user=request.session['user']
@@ -68,6 +56,6 @@ def download_page(request):
         else :
             return HttpResponse("you're not logged in")
     except:
-        return HttpResponse("you're not logged in")
+        return render_to_response('loginform.html', {'logout':"You must login first!"})
     
     
