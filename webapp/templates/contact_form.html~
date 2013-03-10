@@ -160,7 +160,8 @@ ul.nav a { zoom: 1; }  /* the zoom property gives IE the hasLayout trigger it ne
 <body>
 {% load static from staticfiles %}
 <div class="container">
-  <div class="header"><a href="#"><img src="" alt="Insert Logo Here" name="Insert_logo" width="20%" height="90" id="Insert_logo" style="background: #8090AB; display:block;" /></a> 
+  <div class="header"><a href="#"><img src="{% static "iustbsh.jpg" %}
+" width="100%" height="200" alt="IUST BOOK SHARING PROJECT" style="border-color: blue; border: 40; " border="5" /></a> 
     <!-- end .header --></div>
   <div class="sidebar1">
   <h3><center> Site Menu</center></h3>

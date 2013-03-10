@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Search Form</title>
+<title>Search Results</title>
 <style>
 @charset "utf-8";
 body {
@@ -185,16 +185,17 @@ ul.nav a { zoom: 1; }  /* the zoom property gives IE the hasLayout trigger it ne
     </div>
   <div class="content">
     <h4> {{ name }} , profile </h4><br>
-    <h1> Search </h1>
-<p>
-<hr>    
-{% if error %}
-        <p style="color: red;">Please submit a search term.</p>
-    {% endif %}
-    <form action="/search/" method="get">
-        <input type="text" name="q">
-        <input type="submit" value="Search">
-    </form>
+    <p>You searched for: <strong>{{ query }}</strong></p>
+    {% if books %}
+    <p>Found {{ books|length }} book{{ books|pluralize }}.</p>
+    <ul>
+        {% for book in books %}
+        <li><a href='book.url_pdf'>{{ book.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No books matched your search criteria.</p>
+{% endif %}
     <!-- end .content --></div>
   <div class="footer">
     <p><center>Created by &quot;Book Sharing IUST group&quot;&copy; 2013</center></p>
