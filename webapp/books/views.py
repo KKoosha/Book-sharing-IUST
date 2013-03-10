@@ -9,6 +9,7 @@ from books.models import Books
 from upload_app.models import PDF
 
 def contact(request):
+    user=request.session['user']
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -22,13 +23,13 @@ def contact(request):
             return HttpResponseRedirect('/contact/thanks/')
     else:
         form = ContactForm()
-    return render_to_response('contact_form.html', {'form': form})
+    return render_to_response('contact_form.html', {'form': form,'name':user.username})
 
 def search_form(request):
     try:
         user=request.session['user']
         if user.is_authenticated() :
-            return render_to_response('search_form.html')
+            return render_to_response('search_form.html',{'name' : user.username})
     except:
         return HttpResponse("you're not logged in")
 
@@ -38,9 +39,9 @@ def search(request):
         if user.is_authenticated() :
             if 'q' in request.GET and request.GET['q']:
                 q = request.GET['q']
-                books = Books.objects.filter(name__icontains=q)
+                books = PDF.objects.filter(name__icontains=q)
                 return render_to_response('search_results.html',
-                    {'books': books, 'query': q})
+                    {'books': books, 'query': q, 'name':user.username})
             else:
                 return render_to_response('search_form.html', {'error': True})
     except:
@@ -62,9 +63,8 @@ def download_page(request):
     try:
         user=request.session['user']
         if user.is_authenticated() :
-            books_list=Books.objects.all()
             allbooks=PDF.objects.all()
-            return render_to_response('download.html',{'books_list':books_list,'uploadedpdf':allbooks})
+            return render_to_response('download.html',{'books_list':allbooks,'name':user.username})
         else :
             return HttpResponse("you're not logged in")
     except:

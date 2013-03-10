@@ -16,13 +16,13 @@ def list(request):
                     the_author=cd['author']
                     the_comment=cd['comment']
                     newbook = PDF(docfile = request.FILES['docfile'],name=the_name,
-                     author=the_author,comment=the_comment            )
+                    author=the_author,comment=the_comment            )
                     newbook.save()
                     allbooks=PDF.objects.all()
                     books_list=Books.objects.all()
-                    return render_to_response('upload.html',{'uploadedpdf':allbooks,'books_list':books_list})
+                    return render_to_response('upload.html',{'uploadedpdf':allbooks,'name':user.username})
             else:
                 form=UploadForm()
-                return render_to_response('upload.html',{'form':form})
+                return render_to_response('upload.html',{'form':form,'name':user.username})
     except:
         return HttpResponse("you're not logged in")
