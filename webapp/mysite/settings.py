@@ -13,13 +13,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         #'NAME': '/home/amirmasoud/Desktop/booksharing/Book-sharing-IUST/webapp/mysqlite.db',                      # Or path to database file if using sqlite3.
-<<<<<<< HEAD
         'NAME': '/home/erfan/Book-sharing-IUST/webapp/mysqlite.db',
-=======
         #'NAME': '/home/koosha/Desktop/Book-sharing-IUST/webapp/mysqlite.db',
->>>>>>> f9d7ae45776c6a946963629c0095b6397d52e25b
-        #'NAME': '/home/erfan/Book-sharing-IUST/Book-sharing-IUST/webapp/mysqlite.db',
-        'NAME': '/home/meraj/Documents/projects/Book-sharing-IUST/webapp/mysqlite.db',
+        #'NAME': '/home/meraj/Documents/projects/Book-sharing-IUST/webapp/mysqlite.db',
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
